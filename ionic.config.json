@@ -1,0 +1,7 @@
+{
+  "name": "ParcialFinal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
