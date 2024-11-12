@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { AlertController, NavController } from '@ionic/angular';
-import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { FirebaseService } from 'src/app/shared/services/firebase/firebase.service';
 
 @Component({
   selector: 'app-register',
@@ -22,11 +18,7 @@ export class RegisterPage {
   public registerForm!: FormGroup;
 
   constructor(
-    private readonly authSrv: AuthService,
-    private readonly Loadingsrv: LoadingService,
-    private readonly navCtr: NavController,
-    private readonly firebaseService: FirebaseService,
-    private readonly alertCtrl: AlertController
+
   ) {
     this.InitForm();
   }
