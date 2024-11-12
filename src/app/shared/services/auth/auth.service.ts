@@ -1,52 +1,49 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private readonly angularFire: AngularFireAuth) {}
+  private auth = getAuth();
 
-  public async register(email: string, Password: string) {
-    return new Promise((resolve, reject) => {
-      this.angularFire
-        .createUserWithEmailAndPassword(email, Password)
-        .then((res) => resolve(res))
-        .catch((err) => reject(err));
-    });
+  constructor() {}
+
+  public async register(email: string, password: string) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      return userCredential;
+    } catch (error) {
+      throw error;
+    }
   }
-  public async login(email: string, Password: string) {
-    return new Promise((resolve, reject) => {
-      this.angularFire
-        .signInWithEmailAndPassword(email, Password)
-        .then((res) => resolve(res))
-        .catch((err) => reject(err));
-    });
+
+  public async login(email: string, password: string) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      return userCredential;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async logout() {
-    return await this.angularFire.signOut();
+    try {
+      await signOut(this.auth);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  public async isAuth() {
-    return new Promise((resolve, reject) => {
-      this.angularFire.onAuthStateChanged(
-        (user) => {
-          if (user) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        },
-        (exception) => {
-          console.error('Error en la autenticación:', exception);
-          reject(exception);
+  public isAuth() {
+    return new Promise<boolean>((resolve, reject) => {
+      onAuthStateChanged(this.auth, (user) => {
+        if (user) {
+          resolve(true);
+        } else {
+          resolve(false);
         }
-      );
+      });
     });
-  }
-
-  getCurrentUser() {
-    return this.angularFire.authState;
   }
 }
